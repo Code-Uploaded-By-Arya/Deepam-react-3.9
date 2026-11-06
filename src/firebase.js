@@ -21,7 +21,14 @@ const firebaseApp = !getApps().length
   ? initializeApp(firebaseConfig)
   : getApp();
 
-export const auth = getAuth(firebaseApp);
+export const auth = (() => {
+  try {
+    return getAuth(firebaseApp);
+  } catch (err) {
+    console.error("Firebase auth initialization error:", err);
+    return null;
+  }
+})();
 
 // Correctly export a promise that resolves to messaging instance (or null)
 export const getMessagingObject = async () => {
